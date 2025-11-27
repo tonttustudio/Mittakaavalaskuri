@@ -113,3 +113,188 @@ function convertToReal() {
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nukkepaidan kaava-apuri</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: #fafafa;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  .box {
+    background: #fff;
+    max-width: 480px;
+    margin: 0 auto 20px auto;
+    padding: 16px;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  }
+
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 15px;
+  }
+
+  input {
+    width: 100%;
+    font-size: 18px;
+    padding: 8px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .garment-btn {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* neliö */
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid #ddd;
+    padding: 0;
+    background: #000;
+    cursor: pointer;
+  }
+
+  .garment-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* täyttää neliön */
+    display: block;
+  }
+
+  .garment-caption {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 4px;
+    color: #444;
+  }
+
+  .result {
+    margin-top: 16px;
+    font-size: 15px;
+    line-height: 1.6;
+    white-space: pre-line; /* rivinvaihdot näkyy */
+  }
+</style>
+</head>
+<body>
+
+<h1>Nukkepaidan kaava-apuri</h1>
+
+<div class="box">
+  <h2>1. Syötä nuken mitat (cm)</h2>
+
+  <label>Rinnanympärys</label>
+  <input type="number" id="bust" placeholder="Esim. 14">
+
+  <label>Vyötärö</label>
+  <input type="number" id="waist" placeholder="Esim. 12">
+
+  <label>Hartialeveys</label>
+  <input type="number" id="shoulder" placeholder="Esim. 5">
+
+  <label>Selän pituus (kaulasta vyötärölle)</label>
+  <input type="number" id="backLength" placeholder="Esim. 7">
+
+  <label>Käden pituus</label>
+  <input type="number" id="armLength" placeholder="Esim. 6">
+</div>
+
+<div class="box">
+  <h2>2. Valitse vaate painamalla kuvaa</h2>
+
+  <div class="grid">
+    <!-- PAITA-kuvapainike -->
+    <button class="garment-btn" onclick="teePaitaKaava()">
+      <!-- VAIHDA TÄMÄ OMAAN PAIDAN KUVAAN -->
+      <img src="https://via.placeholder.com/400x400.png?text=Paita" alt="Paita">
+    </button>
+    <div class="garment-caption">Pitkähihainen paita (klikkaa kuvaa)</div>
+  </div>
+
+  <div class="result" id="patternOutput"></div>
+</div>
+
+<script>
+function f(n) {
+  return n.toFixed(1).replace(".", ",");
+}
+
+function teePaitaKaava() {
+  const bust = parseFloat(document.getElementById("bust").value);
+  const waist = parseFloat(document.getElementById("waist").value);
+  const shoulder = parseFloat(document.getElementById("shoulder").value);
+  const backLength = parseFloat(document.getElementById("backLength").value);
+  const armLength = parseFloat(document.getElementById("armLength").value);
+
+  const out = document.getElementById("patternOutput");
+
+  if ([bust, waist, shoulder, backLength, armLength].some(x => isNaN(x) || x <= 0)) {
+    out.textContent = "Syötä ensin kaikki mitat (rinta, vyötärö, hartia, selkä, käsi).";
+    return;
+  }
+
+  // Hyvin yksinkertainen peruskaava (voi hienosäätää myöhemmin):
+  const ease = 0.5; // väljyyttä 0.5 cm per sivu
+  const frontWidth = bust / 4 + ease;
+  const backWidth = bust / 4 + ease;
+  const bodyLength = backLength; // paidan pituus
+  const shoulderLen = shoulder / 2; // olkasauma
+  const sleeveLength = armLength;
+  const sleeveWidth = bust / 4 + ease;
+
+  let txt = "";
+  txt += "📏 Paitakaavan perusmitat nuken mitoilla:\n\n";
+
+  txt += "ETUKAPPALE:\n";
+  txt += "- Leveys: " + f(frontWidth) + " cm\n";
+  txt += "- Korkeus (olalta helmaan): " + f(bodyLength) + " cm\n";
+  txt += "- Olkasauma: " + f(shoulderLen) + " cm\n";
+  txt += "- Pääntien leveys: " + f(bust / 12) + " cm (voi pyöristää)\n";
+  txt += "- Pääntien syvyys: " + f(bust / 20) + " cm\n\n";
+
+  txt += "TAKAKAPPALE:\n";
+  txt += "- Leveys: " + f(backWidth) + " cm\n";
+  txt += "- Korkeus: sama kuin etukappale\n";
+  txt += "- Pääntien syvyys: " + f(bust / 40) + " cm (matalampi kuin edessä)\n\n";
+
+  txt += "HIHA:\n";
+  txt += "- Pituus: " + f(sleeveLength) + " cm (olkasaumasta ranteeseen)\n";
+  txt += "- Leveys yläreunassa (kainalosta kainaloon): " + f(sleeveWidth) + " cm\n";
+  txt += "- Voit piirtää hihan suorakulmiona ja pyöristää yläreunan hieman kaarevaksi.\n\n";
+
+  txt += "Piirto-ohje lyhyesti:\n";
+  txt += "1. Piirrä etukappaleeksi suorakulmio (leveys " + f(frontWidth) + " cm, korkeus " + f(bodyLength) + " cm).\n";
+  txt += "2. Merkitse yläreunaan hartialeveys " + f(shoulderLen) + " cm ja muotoile olkasauma.\n";
+  txt += "3. Leikkaa pääntie: leveys " + f(bust / 12) + " cm, syvyys " + f(bust / 20) + " cm.\n";
+  txt += "4. Takakappale sama, mutta pääntie matalampi.\n";
+  txt += "5. Hiha: suorakulmio (pituus " + f(sleeveLength) + " cm, leveys " + f(sleeveWidth) + " cm). Pyöristä yläreunaa hieman.\n";
+  txt += "6. Lisää saumavarat (esim. 0,5–1,0 cm) reunoille ennen leikkaamista.\n";
+
+  out.textContent = txt;
+}
+</script>
+</body>
+</html>
