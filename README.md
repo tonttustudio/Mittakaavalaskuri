@@ -1,0 +1,2 @@
+# Mittakaavalaskuri
+Laske nukkekodin mittakaavoja
