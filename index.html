@@ -3,121 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Nukkekodin mittakaavalaskuri</title>
-
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 20px;
-        background: #fafafa;
-    }
-
-    h1 {
-        font-size: 24px;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    .box {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 8px rgba(0,0,0,0.1);
-        max-width: 400px;
-        margin: auto;
-    }
-
-    input {
-        width: 100%;
-        font-size: 20px;
-        padding: 10px;
-        margin-bottom: 15px;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-    }
-
-    button {
-        width: 100%;
-        padding: 12px;
-        margin-top: 5px;
-        font-size: 18px;
-        border: none;
-        background: #d62828;
-        color: white;
-        border-radius: 8px;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background: #b91d1d;
-    }
-
-    .result {
-        margin-top: 20px;
-        font-size: 20px;
-        line-height: 1.6;
-    }
-
-</style>
-</head>
-
-<body>
-
-<h1>Nukkekodin mittakaavalaskuri</h1>
-
-<div class="box">
-    <label>Syötä mitta (cm):</label>
-    <input type="number" id="inputValue" placeholder="Esim. 120">
-
-    <button onclick="convertToMini()">Oikeasta → Miniatyyri</button>
-    <button onclick="convertToReal()">Miniatyyristä → Oikea</button>
-
-    <div class="result" id="results"></div>
-</div>
-
-<script>
-function fix(n) {
-    return n.toFixed(1).replace(".", ",");
-}
-
-function convertToMini() {
-    let v = parseFloat(document.getElementById("inputValue").value);
-    if (isNaN(v)) return;
-
-    let s6 = v / 6;
-    let s12 = v / 12;
-    let s18 = v / 18;
-
-    document.getElementById("results").innerHTML =
-        "<b>1:6</b> → " + fix(s6) + " cm<br>" +
-        "<b>1:12</b> → " + fix(s12) + " cm<br>" +
-        "<b>1:18</b> → " + fix(s18) + " cm";
-}
-
-function convertToReal() {
-    let v = parseFloat(document.getElementById("inputValue").value);
-    if (isNaN(v)) return;
-
-    let r6 = v * 6;
-    let r12 = v * 12;
-    let r18 = v * 18;
-
-    document.getElementById("results").innerHTML =
-        "<b>1:6</b> → " + fix(r6) + " cm<br>" +
-        "<b>1:12</b> → " + fix(r12) + " cm<br>" +
-        "<b>1:18</b> → " + fix(r18) + " cm";
-}
-</script>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="fi">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nukkepaidan kaava-apuri</title>
 
 <style>
@@ -132,6 +17,11 @@ function convertToReal() {
     text-align: center;
     font-size: 22px;
     margin-bottom: 20px;
+  }
+
+  h2 {
+    font-size: 18px;
+    margin: 0 0 10px 0;
   }
 
   .box {
@@ -197,6 +87,31 @@ function convertToReal() {
     line-height: 1.6;
     white-space: pre-line; /* rivinvaihdot näkyy */
   }
+
+  .svg-wrapper {
+    margin-top: 16px;
+    border: 1px dashed #ccc;
+    background: #fdfdfd;
+    padding: 8px;
+  }
+
+  .svg-wrapper p {
+    margin: 0 0 6px 0;
+    font-size: 13px;
+    color: #555;
+  }
+
+  .svg-container {
+    width: 100%;
+    max-width: 420px; /* likimain A4-leveys ruudulla */
+    margin: 0 auto;
+  }
+
+  svg {
+    width: 100%;
+    height: auto;
+    background: #fff;
+  }
 </style>
 </head>
 <body>
@@ -235,6 +150,11 @@ function convertToReal() {
   </div>
 
   <div class="result" id="patternOutput"></div>
+
+  <div class="svg-wrapper" id="svgWrapper" style="display:none;">
+    <p>Yksinkertainen kaavakuva. Tulosta selaimen Tulosta-toiminnolla (skaala 100&nbsp;%).</p>
+    <div class="svg-container" id="patternSvgContainer"></div>
+  </div>
 </div>
 
 <script>
@@ -250,13 +170,17 @@ function teePaitaKaava() {
   const armLength = parseFloat(document.getElementById("armLength").value);
 
   const out = document.getElementById("patternOutput");
+  const svgWrapper = document.getElementById("svgWrapper");
+  const svgContainer = document.getElementById("patternSvgContainer");
 
   if ([bust, waist, shoulder, backLength, armLength].some(x => isNaN(x) || x <= 0)) {
     out.textContent = "Syötä ensin kaikki mitat (rinta, vyötärö, hartia, selkä, käsi).";
+    svgWrapper.style.display = "none";
+    svgContainer.innerHTML = "";
     return;
   }
 
-  // Hyvin yksinkertainen peruskaava (voi hienosäätää myöhemmin):
+  // Hyvin yksinkertainen peruskaava:
   const ease = 0.5; // väljyyttä 0.5 cm per sivu
   const frontWidth = bust / 4 + ease;
   const backWidth = bust / 4 + ease;
@@ -294,6 +218,52 @@ function teePaitaKaava() {
   txt += "6. Lisää saumavarat (esim. 0,5–1,0 cm) reunoille ennen leikkaamista.\n";
 
   out.textContent = txt;
+
+  // --- Yksinkertainen kaavakuvio SVG:nä ---
+  // Mittayksikkö: cm -> skaalataan "keinotekoisesti" sopivaan kokoon ruudulla.
+  const scale = 10; // 1 cm = 10 "yksikköä" SVG:ssä
+
+  const frontW = frontWidth * scale;
+  const frontH = bodyLength * scale;
+  const backW = backWidth * scale;
+  const backH = bodyLength * scale;
+  const sleeveW = sleeveWidth * scale;
+  const sleeveH = sleeveLength * scale;
+
+  const padding = 20;
+
+  const svgWidth = padding*3 + frontW + backW;
+  const svgHeight = padding*3 + Math.max(frontH, backH, sleeveH);
+
+  const svgParts = [];
+
+  svgParts.push(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}">`,
+    `<rect x="0" y="0" width="${svgWidth}" height="${svgHeight}" fill="white" />`
+  );
+
+  // Etukappale
+  svgParts.push(
+    `<rect x="${padding}" y="${padding}" width="${frontW}" height="${frontH}" fill="none" stroke="black" stroke-width="1" />`,
+    `<text x="${padding + frontW/2}" y="${padding - 5}" text-anchor="middle" font-size="12">Etukappale</text>`
+  );
+
+  // Takakappale
+  svgParts.push(
+    `<rect x="${padding*2 + frontW}" y="${padding}" width="${backW}" height="${backH}" fill="none" stroke="black" stroke-width="1" />`,
+    `<text x="${padding*2 + frontW + backW/2}" y="${padding - 5}" text-anchor="middle" font-size="12">Takakappale</text>`
+  );
+
+  // Hiha
+  svgParts.push(
+    `<rect x="${padding}" y="${padding*2 + Math.max(frontH, backH)}" width="${sleeveW}" height="${sleeveH}" fill="none" stroke="black" stroke-width="1" />`,
+    `<text x="${padding + sleeveW/2}" y="${padding*2 + Math.max(frontH, backH) - 5}" text-anchor="middle" font-size="12">Hiha (suorakulmio)</text>`
+  );
+
+  svgParts.push(`</svg>`);
+
+  svgContainer.innerHTML = svgParts.join("");
+  svgWrapper.style.display = "block";
 }
 </script>
 </body>
