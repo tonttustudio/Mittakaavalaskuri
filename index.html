@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nukkekodin mittakaavalaskuri</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: #fafafa;
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .box {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 8px rgba(0,0,0,0.1);
+        max-width: 400px;
+        margin: auto;
+    }
+
+    input {
+        width: 100%;
+        font-size: 20px;
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 5px;
+        font-size: 18px;
+        border: none;
+        background: #d62828;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #b91d1d;
+    }
+
+    .result {
+        margin-top: 20px;
+        font-size: 20px;
+        line-height: 1.6;
+    }
+
+</style>
+</head>
+
+<body>
+
+<h1>Nukkekodin mittakaavalaskuri</h1>
+
+<div class="box">
+    <label>Syötä mitta (cm):</label>
+    <input type="number" id="inputValue" placeholder="Esim. 120">
+
+    <button onclick="convertToMini()">Oikeasta → Miniatyyri</button>
+    <button onclick="convertToReal()">Miniatyyristä → Oikea</button>
+
+    <div class="result" id="results"></div>
+</div>
+
+<script>
+function fix(n) {
+    return n.toFixed(1).replace(".", ",");
+}
+
+function convertToMini() {
+    let v = parseFloat(document.getElementById("inputValue").value);
+    if (isNaN(v)) return;
+
+    let s6 = v / 6;
+    let s12 = v / 12;
+    let s18 = v / 18;
+
+    document.getElementById("results").innerHTML =
+        "<b>1:6</b> → " + fix(s6) + " cm<br>" +
+        "<b>1:12</b> → " + fix(s12) + " cm<br>" +
+        "<b>1:18</b> → " + fix(s18) + " cm";
+}
+
+function convertToReal() {
+    let v = parseFloat(document.getElementById("inputValue").value);
+    if (isNaN(v)) return;
+
+    let r6 = v * 6;
+    let r12 = v * 12;
+    let r18 = v * 18;
+
+    document.getElementById("results").innerHTML =
+        "<b>1:6</b> → " + fix(r6) + " cm<br>" +
+        "<b>1:12</b> → " + fix(r12) + " cm<br>" +
+        "<b>1:18</b> → " + fix(r18) + " cm";
+}
+</script>
+
+</body>
+</html>
