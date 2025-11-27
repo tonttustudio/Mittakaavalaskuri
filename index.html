@@ -2,269 +2,268 @@
 <html lang="fi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Nukkepaidan kaava-apuri</title>
 
+<!-- ==========================
+     FONTIT
+==============================-->
+<link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- ==========================
+     ULKOASU (CSS)
+==============================-->
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background: #fafafa;
-  }
+    body {
+        font-family: Arial, sans-serif;
+        background: #fafafa;
+        margin: 0;
+        padding: 20px;
+    }
 
-  h1 {
-    text-align: center;
-    font-size: 22px;
-    margin-bottom: 20px;
-  }
+    h1 {
+        text-align: center;
+        font-size: 26px;
+        margin-bottom: 20px;
+    }
 
-  h2 {
-    font-size: 18px;
-    margin: 0 0 10px 0;
-  }
+    h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
 
-  .box {
-    background: #fff;
-    max-width: 480px;
-    margin: 0 auto 20px auto;
-    padding: 16px;
-    border-radius: 10px;
-    box-shadow: 0 0 8px rgba(0,0,0,0.1);
-  }
+    .box {
+        background: #fff;
+        max-width: 480px;
+        margin: 0 auto 20px auto;
+        padding: 16px;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.08);
+    }
 
-  label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 15px;
-  }
+    label {
+        font-size: 15px;
+        margin-bottom: 6px;
+        display: block;
+    }
 
-  input {
-    width: 100%;
-    font-size: 18px;
-    padding: 8px;
-    margin-bottom: 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-  }
+    input {
+        width: 100%;
+        font-size: 18px;
+        padding: 8px;
+        margin-bottom: 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
 
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-    margin-top: 10px;
-  }
+    /* Kuvapainike */
+    .garment-btn {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        border-radius: 10px;
+        border: 2px solid #ddd;
+        overflow: hidden;
+        cursor: pointer;
+        padding: 0;
+        background: #000;
+    }
 
-  .garment-btn {
-    width: 100%;
-    aspect-ratio: 1 / 1; /* neliö */
-    border-radius: 10px;
-    overflow: hidden;
-    border: 2px solid #ddd;
-    padding: 0;
-    background: #000;
-    cursor: pointer;
-  }
+    .garment-btn img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 
-  .garment-btn img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* täyttää neliön */
-    display: block;
-  }
+    .garment-caption {
+        text-align: center;
+        font-size: 14px;
+        margin-top: 4px;
+        color: #444;
+    }
 
-  .garment-caption {
-    text-align: center;
-    font-size: 14px;
-    margin-top: 4px;
-    color: #444;
-  }
+    .result {
+        margin-top: 16px;
+        font-size: 15px;
+        white-space: pre-line;
+        line-height: 1.6;
+    }
 
-  .result {
-    margin-top: 16px;
-    font-size: 15px;
-    line-height: 1.6;
-    white-space: pre-line; /* rivinvaihdot näkyy */
-  }
+    /* Kaavapiirroksen laatikko */
+    .svg-wrapper {
+        margin-top: 20px;
+        border: 1px dashed #ccc;
+        border-radius: 10px;
+        padding: 10px;
+        background: #fff;
+    }
 
-  .svg-wrapper {
-    margin-top: 16px;
-    border: 1px dashed #ccc;
-    background: #fdfdfd;
-    padding: 8px;
-  }
+    .svg-wrapper p {
+        margin: 0 0 10px;
+        font-size: 13px;
+    }
 
-  .svg-wrapper p {
-    margin: 0 0 6px 0;
-    font-size: 13px;
-    color: #555;
-  }
+    .svg-container {
+        width: 100%;
+        overflow: hidden;
+    }
 
-  .svg-container {
-    width: 100%;
-    max-width: 420px; /* likimain A4-leveys ruudulla */
-    margin: 0 auto;
-  }
-
-  svg {
-    width: 100%;
-    height: auto;
-    background: #fff;
-  }
+    svg {
+        width: 100%;
+        background: #fff;
+    }
 </style>
+
 </head>
 <body>
 
+<!-- ==========================
+     OTSIKKO
+==============================-->
 <h1>Nukkepaidan kaava-apuri</h1>
 
+<!-- ==========================
+     MITAT
+==============================-->
 <div class="box">
-  <h2>1. Syötä nuken mitat (cm)</h2>
+    <h2>1. Syötä nuken mitat (cm)</h2>
 
-  <label>Rinnanympärys</label>
-  <input type="number" id="bust" placeholder="Esim. 14">
+    <label>Rinnanympärys</label>
+    <input type="number" id="bust" placeholder="Esim. 14">
 
-  <label>Vyötärö</label>
-  <input type="number" id="waist" placeholder="Esim. 12">
+    <label>Vyötärö</label>
+    <input type="number" id="waist" placeholder="Esim. 12">
 
-  <label>Hartialeveys</label>
-  <input type="number" id="shoulder" placeholder="Esim. 5">
+    <label>Hartialeveys</label>
+    <input type="number" id="shoulder" placeholder="Esim. 5">
 
-  <label>Selän pituus (kaulasta vyötärölle)</label>
-  <input type="number" id="backLength" placeholder="Esim. 7">
+    <label>Selän pituus</label>
+    <input type="number" id="backLength" placeholder="Esim. 7">
 
-  <label>Käden pituus</label>
-  <input type="number" id="armLength" placeholder="Esim. 6">
+    <label>Käden pituus</label>
+    <input type="number" id="armLength" placeholder="Esim. 6">
 </div>
 
+<!-- ==========================
+     PAITAKUVAPAINIKE
+==============================-->
 <div class="box">
-  <h2>2. Valitse vaate painamalla kuvaa</h2>
+    <h2>2. Valitse vaate painamalla kuvaa</h2>
 
-  <div class="grid">
-    <!-- PAITA-kuvapainike -->
     <button class="garment-btn" onclick="teePaitaKaava()">
-      <!-- VAIHDA TÄMÄ OMAAN PAIDAN KUVAAN -->
-      <img src="https://via.placeholder.com/400x400.png?text=Paita" alt="Paita">
+        <!-- Korvaa omaan kuvaasi -->
+        <img src="https://via.placeholder.com/400x400.png?text=Paita" alt="Paita">
     </button>
-    <div class="garment-caption">Pitkähihainen paita (klikkaa kuvaa)</div>
-  </div>
 
-  <div class="result" id="patternOutput"></div>
+    <div class="garment-caption">Pitkähihainen paita</div>
 
-  <div class="svg-wrapper" id="svgWrapper" style="display:none;">
-    <p>Yksinkertainen kaavakuva. Tulosta selaimen Tulosta-toiminnolla (skaala 100&nbsp;%).</p>
-    <div class="svg-container" id="patternSvgContainer"></div>
-  </div>
+    <div class="result" id="patternOutput"></div>
+
+    <div class="svg-wrapper" id="svgWrapper" style="display:none;">
+        <p>Yksinkertainen kaavakuva (tulosta 100 % koossa).</p>
+        <div class="svg-container" id="patternSvgContainer"></div>
+    </div>
 </div>
 
+<!-- ==========================
+     KAAVALOGIIKKA (JS)
+==============================-->
 <script>
 function f(n) {
-  return n.toFixed(1).replace(".", ",");
+    return n.toFixed(1).replace(".", ",");
 }
 
 function teePaitaKaava() {
-  const bust = parseFloat(document.getElementById("bust").value);
-  const waist = parseFloat(document.getElementById("waist").value);
-  const shoulder = parseFloat(document.getElementById("shoulder").value);
-  const backLength = parseFloat(document.getElementById("backLength").value);
-  const armLength = parseFloat(document.getElementById("armLength").value);
 
-  const out = document.getElementById("patternOutput");
-  const svgWrapper = document.getElementById("svgWrapper");
-  const svgContainer = document.getElementById("patternSvgContainer");
+    const bust = parseFloat(document.getElementById("bust").value);
+    const waist = parseFloat(document.getElementById("waist").value);
+    const shoulder = parseFloat(document.getElementById("shoulder").value);
+    const backLength = parseFloat(document.getElementById("backLength").value);
+    const armLength = parseFloat(document.getElementById("armLength").value);
 
-  if ([bust, waist, shoulder, backLength, armLength].some(x => isNaN(x) || x <= 0)) {
-    out.textContent = "Syötä ensin kaikki mitat (rinta, vyötärö, hartia, selkä, käsi).";
-    svgWrapper.style.display = "none";
-    svgContainer.innerHTML = "";
-    return;
-  }
+    const out = document.getElementById("patternOutput");
+    const svgWrapper = document.getElementById("svgWrapper");
+    const svgContainer = document.getElementById("patternSvgContainer");
 
-  // Hyvin yksinkertainen peruskaava:
-  const ease = 0.5; // väljyyttä 0.5 cm per sivu
-  const frontWidth = bust / 4 + ease;
-  const backWidth = bust / 4 + ease;
-  const bodyLength = backLength; // paidan pituus
-  const shoulderLen = shoulder / 2; // olkasauma
-  const sleeveLength = armLength;
-  const sleeveWidth = bust / 4 + ease;
+    if ([bust, waist, shoulder, backLength, armLength].some(x => isNaN(x) || x <= 0)) {
+        out.textContent = "Syötä kaikki mitat ensin.";
+        svgWrapper.style.display = "none";
+        return;
+    }
 
-  let txt = "";
-  txt += "📏 Paitakaavan perusmitat nuken mitoilla:\n\n";
+    const ease = 0.5;
+    const frontWidth = bust / 4 + ease;
+    const backWidth = bust / 4 + ease;
+    const bodyLength = backLength;
+    const shoulderLen = shoulder / 2;
+    const sleeveLength = armLength;
+    const sleeveWidth = bust / 4 + ease;
 
-  txt += "ETUKAPPALE:\n";
-  txt += "- Leveys: " + f(frontWidth) + " cm\n";
-  txt += "- Korkeus (olalta helmaan): " + f(bodyLength) + " cm\n";
-  txt += "- Olkasauma: " + f(shoulderLen) + " cm\n";
-  txt += "- Pääntien leveys: " + f(bust / 12) + " cm (voi pyöristää)\n";
-  txt += "- Pääntien syvyys: " + f(bust / 20) + " cm\n\n";
+    /* ==========================
+       TEKSTIOHJEET
+    =============================*/
+    let txt = "";
+    txt += "📏 Paitakaavan mitat nuken mitoilla:\n\n";
+    txt += `Etukappale: leveys ${f(frontWidth)} cm, korkeus ${f(bodyLength)} cm\n`;
+    txt += `Olkasauma: ${f(shoulderLen)} cm\n`;
+    txt += `Pääntie: leveys ${f(bust/12)} cm, syvyys ${f(bust/20)} cm\n\n`;
+    txt += `Takakappale: leveys ${f(backWidth)} cm (pääntie matalampi)\n\n`;
+    txt += `Hiha: pituus ${f(sleeveLength)} cm, leveys ${f(sleeveWidth)} cm\n\n`;
+    txt += "Lisää saumavarat (0,5–1 cm).";
 
-  txt += "TAKAKAPPALE:\n";
-  txt += "- Leveys: " + f(backWidth) + " cm\n";
-  txt += "- Korkeus: sama kuin etukappale\n";
-  txt += "- Pääntien syvyys: " + f(bust / 40) + " cm (matalampi kuin edessä)\n\n";
+    out.textContent = txt;
 
-  txt += "HIHA:\n";
-  txt += "- Pituus: " + f(sleeveLength) + " cm (olkasaumasta ranteeseen)\n";
-  txt += "- Leveys yläreunassa (kainalosta kainaloon): " + f(sleeveWidth) + " cm\n";
-  txt += "- Voit piirtää hihan suorakulmiona ja pyöristää yläreunan hieman kaarevaksi.\n\n";
+    /* ==========================
+       SVG-KAAVAPIIRROS
+    =============================*/
+    const scale = 10;        // 1 cm = 10 yksikköä
+    const padding = 40;
+    const labelFont = 14;
+    const labelYOffset = -10;
 
-  txt += "Piirto-ohje lyhyesti:\n";
-  txt += "1. Piirrä etukappaleeksi suorakulmio (leveys " + f(frontWidth) + " cm, korkeus " + f(bodyLength) + " cm).\n";
-  txt += "2. Merkitse yläreunaan hartialeveys " + f(shoulderLen) + " cm ja muotoile olkasauma.\n";
-  txt += "3. Leikkaa pääntie: leveys " + f(bust / 12) + " cm, syvyys " + f(bust / 20) + " cm.\n";
-  txt += "4. Takakappale sama, mutta pääntie matalampi.\n";
-  txt += "5. Hiha: suorakulmio (pituus " + f(sleeveLength) + " cm, leveys " + f(sleeveWidth) + " cm). Pyöristä yläreunaa hieman.\n";
-  txt += "6. Lisää saumavarat (esim. 0,5–1,0 cm) reunoille ennen leikkaamista.\n";
+    const frontW = frontWidth * scale;
+    const frontH = bodyLength * scale;
+    const backW = backWidth * scale;
+    const backH = bodyLength * scale;
+    const sleeveW = sleeveWidth * scale;
+    const sleeveH = sleeveLength * scale;
 
-  out.textContent = txt;
+    const svgWidth = padding*3 + frontW + backW;
+    const svgHeight = padding*4 + Math.max(frontH, backH) + sleeveH;
 
-  // --- Yksinkertainen kaavakuvio SVG:nä ---
-  // Mittayksikkö: cm -> skaalataan "keinotekoisesti" sopivaan kokoon ruudulla.
-  const scale = 10; // 1 cm = 10 "yksikköä" SVG:ssä
+    const svgParts = [];
 
-  const frontW = frontWidth * scale;
-  const frontH = bodyLength * scale;
-  const backW = backWidth * scale;
-  const backH = bodyLength * scale;
-  const sleeveW = sleeveWidth * scale;
-  const sleeveH = sleeveLength * scale;
+    svgParts.push(
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}">`,
+        `<rect x="0" y="0" width="${svgWidth}" height="${svgHeight}" fill="white" />`
+    );
 
-  const padding = 20;
+    // Etukappale
+    svgParts.push(
+        `<text x="${padding + frontW/2}" y="${padding + labelYOffset}" font-size="${labelFont}" text-anchor="middle">Etukappale</text>`,
+        `<rect x="${padding}" y="${padding}" width="${frontW}" height="${frontH}" stroke="black" stroke-width="2" fill="none" />`
+    );
 
-  const svgWidth = padding*3 + frontW + backW;
-  const svgHeight = padding*3 + Math.max(frontH, backH, sleeveH);
+    // Takakappale
+    svgParts.push(
+        `<text x="${padding*2 + frontW + backW/2}" y="${padding + labelYOffset}" font-size="${labelFont}" text-anchor="middle">Takakappale</text>`,
+        `<rect x="${padding*2 + frontW}" y="${padding}" width="${backW}" height="${backH}" stroke="black" stroke-width="2" fill="none" />`
+    );
 
-  const svgParts = [];
+    // Hiha
+    const sleeveY = padding*2 + Math.max(frontH, backH);
+    svgParts.push(
+        `<text x="${padding + sleeveW/2}" y="${sleeveY + labelYOffset}" font-size="${labelFont}" text-anchor="middle">Hiha</text>`,
+        `<rect x="${padding}" y="${sleeveY}" width="${sleeveW}" height="${sleeveH}" stroke="black" stroke-width="2" fill="none" />`
+    );
 
-  svgParts.push(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}">`,
-    `<rect x="0" y="0" width="${svgWidth}" height="${svgHeight}" fill="white" />`
-  );
+    svgParts.push(`</svg>`);
 
-  // Etukappale
-  svgParts.push(
-    `<rect x="${padding}" y="${padding}" width="${frontW}" height="${frontH}" fill="none" stroke="black" stroke-width="1" />`,
-    `<text x="${padding + frontW/2}" y="${padding - 5}" text-anchor="middle" font-size="12">Etukappale</text>`
-  );
-
-  // Takakappale
-  svgParts.push(
-    `<rect x="${padding*2 + frontW}" y="${padding}" width="${backW}" height="${backH}" fill="none" stroke="black" stroke-width="1" />`,
-    `<text x="${padding*2 + frontW + backW/2}" y="${padding - 5}" text-anchor="middle" font-size="12">Takakappale</text>`
-  );
-
-  // Hiha
-  svgParts.push(
-    `<rect x="${padding}" y="${padding*2 + Math.max(frontH, backH)}" width="${sleeveW}" height="${sleeveH}" fill="none" stroke="black" stroke-width="1" />`,
-    `<text x="${padding + sleeveW/2}" y="${padding*2 + Math.max(frontH, backH) - 5}" text-anchor="middle" font-size="12">Hiha (suorakulmio)</text>`
-  );
-
-  svgParts.push(`</svg>`);
-
-  svgContainer.innerHTML = svgParts.join("");
-  svgWrapper.style.display = "block";
+    svgContainer.innerHTML = svgParts.join("");
+    svgWrapper.style.display = "block";
 }
 </script>
+
 </body>
 </html>
